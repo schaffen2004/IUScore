@@ -5,9 +5,9 @@ from transformers import AutoTokenizer, AutoModel
 from captum.attr import IntegratedGradients
 
 class SpanExtracter:
-    def __init__(self,model_name = 'vinai/phobert-base',gpu = '0'):
+    def __init__(self,model_name = 'vinai/phobert-base',device=torch.device("cpu")):
         self.tokenizer = AutoTokenizer.from_pretrained(model_name)
-        self.device = torch.device(f"cuda:{gpu}" if torch.cuda.is_available() else "cpu")
+        self.device = device
         self.model = AutoModel.from_pretrained(model_name,output_attentions=True).to(self.device)
         self.model.eval()
     
