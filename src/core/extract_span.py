@@ -120,8 +120,12 @@ class SpanExtracter:
         a = self.normalize(att)
         g = self.normalize(grad)
         i = self.normalize(ig)
-
-        return 0.25*a + 0.5*g + 0.25*i
+        strength = np.array([a.var(), g.var(), i.var()]) + 1e-8  
+        weights = strength / strength.sum()
+        
+        combined_weights = weights[0]*a + weights[1]*g + weights[2]*i
+        
+        return combined_weights
     
     @staticmethod
     def extract_best_span(scores, a_start, a_end, max_len=8):
